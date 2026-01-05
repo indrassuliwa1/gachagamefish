@@ -164,7 +164,7 @@ function App() {
                 👋
               </div>
               <h2 className="text-2xl font-black text-white mb-2">Selamat Datang!</h2>
-              <p className="text-gray-400 text-sm mb-6">Selamat datang di <span className="text-indigo-400 font-bold">Supri IT RNG</span>. Sebelum bermain, mohon perhatikan hal berikut:</p>
+              <p className="text-gray-400 text-sm mb-6">Selamat datang di <span className="text-indigo-400 font-bold">Supri IT</span>. Sebelum bermain, mohon perhatikan hal berikut:</p>
               
               <div className="bg-black/30 p-4 rounded-xl text-left space-y-3 mb-8 text-sm text-gray-300 border border-white/5">
                 <div className="flex items-start gap-3">
@@ -181,7 +181,7 @@ function App() {
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-indigo-400 mt-0.5">✔</span>
-                  <p>Jika Kamu Dapat <span className="text-blue-400 font-bold">Ikan</span> Kamu Bisa Menghubungi Saya Atau Add Akun Roblox Saya @RyzenASF</p>
+                  <p>Jika kamu dapta <span className="text-blue-400 font-bold">Ikan</span> Kamu bisa menghubungi saya dengan menyertakan screenshot hasil tangkapan atau add akun roblox @RyzenASF</p>
                 </div>
               </div>
 
