@@ -3,7 +3,7 @@ import axios from 'axios';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// --- DATA IKAN (LOCAL BACKUP) ---
+
 const LOCAL_FISH_DB = [
   { name: "Aduh Kamu Dapat Sampah", rarity: "Common", chance: 0.40, color: "text-gray-400", price: 5 },
   { name: "Iziin belum Hoki", rarity: "Uncommon", chance: 0.30, color: "text-gray-400", price: 15 },
@@ -168,7 +168,7 @@ function App() {
                 👋
               </div>
               <h2 className="text-2xl font-black text-white mb-2">Selamat Datang!</h2>
-              <p className="text-gray-400 text-sm mb-6">Berikut adalah aturan main <span className="text-indigo-400 font-bold">Supri IT RNG</span>:</p>
+              <p className="text-gray-400 text-sm mb-6">Berikut adalah aturan main <span className="text-indigo-400 font-bold">Supri IT</span>:</p>
               
               <div className="bg-black/30 p-4 rounded-xl text-left space-y-3 mb-8 text-sm text-gray-300 border border-white/5">
                 <div className="flex items-start gap-3">
@@ -185,7 +185,7 @@ function App() {
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-indigo-400 mt-0.5">✔</span>
-                  <p>Dapat Ikan langka? Hubungi Roblox: <span className="text-white font-bold">@RyzenASF</span></p>
+                  <p>Dapat Ikan langka? Hubungi Saya atau Bisa Add Roblox: <span className="text-white font-bold">@RyzenASF</span></p>
                 </div>
               </div>
 
@@ -193,7 +193,7 @@ function App() {
                 onClick={handleAcceptWelcome}
                 className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all active:scale-95 shadow-lg shadow-indigo-500/25"
               >
-                SIAP, AYO GAS! 🚀
+                Gassin Gak Si! 🚀
               </button>
             </div>
           </motion.div>
@@ -349,7 +349,7 @@ function App() {
       {/* --- FOOTER (ADA TOMBOL LIHAT ATURAN) --- */}
       <footer className="w-full bg-[#202225] border-t border-white/5 py-8 mt-auto z-10">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm mb-4">&copy; 2024 <span className="text-indigo-400 font-bold">Supri IT RNG</span>. All rights reserved.</p>
+          <p className="text-gray-500 text-sm mb-4">&copy; 2026 <span className="text-indigo-400 font-bold">Indra Suliwa</span>. All rights reserved.</p>
           <div className="flex justify-center items-center gap-4 text-xs text-gray-600">
             {/* TOMBOL UNTUK MEMBUKA KEMBALI POP-UP */}
             <button 
