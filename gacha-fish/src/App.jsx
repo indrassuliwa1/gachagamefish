@@ -345,7 +345,7 @@ function App() {
       {/* --- FOOTER --- */}
       <footer className="w-full bg-[#202225] border-t border-white/5 py-8 mt-auto z-10">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm mb-2">&copy; 2024 <span className="text-indigo-400 font-bold">Supri IT RNG</span>. All rights reserved.</p>
+          <p className="text-gray-500 text-sm mb-2">&copy; 2026 <span className="text-indigo-400 font-bold">Indra Suliwa</span>. All rights reserved.</p>
           <div className="flex justify-center gap-4 text-xs text-gray-600">
             <a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a>
             <span>•</span>
