@@ -9,10 +9,8 @@ const LOCAL_FISH_DB = [
   { name: "Iziin belum Hoki", rarity: "Uncommon", chance: 0.30, color: "text-gray-400", price: 15 },
   { name: "Sinar Manta", rarity: "Rare", chance: 0.15, color: "text-blue-400", price: 50 },
   { name: "Kepiting Ruin", rarity: "Epic", chance: 0.10, color: "text-purple-400", price: 200 },
-  // Mitos menggantikan Legendary (Merah)
-  { name: "Kepiting Laut Runic", rarity: "Mitos", chance: 0.04, color: "text-red-500", price: 1000 }, 
-  // Secret menggantikan Mythical (Hijau Muda)
-  { name: "Hiu Petarung Glaidasi", rarity: "Secret", chance: 0.01, color: "text-lime-400", price: 10000 }, 
+  { name: "Kepiting Laut Runic", rarity: "Mitos", chance: 0.04, color: "text-red-500", price: 1000 },
+  { name: "Hiu Petarung Glaidasi", rarity: "Secret", chance: 0.01, color: "text-lime-400", price: 10000 },
   { name: "Orca", rarity: "Secret", chance: 0.01, color: "text-lime-400", price: 10000 },
 ];
 
@@ -27,9 +25,26 @@ function App() {
     return savedCoins ? parseInt(savedCoins) : 300;
   });
 
+  // -- WELCOME POPUP STATE --
+  const [showWelcome, setShowWelcome] = useState(false);
+
   useEffect(() => {
     localStorage.setItem('fish_coins', coins);
   }, [coins]);
+
+  // Cek apakah user pengguna baru saat website dimuat
+  useEffect(() => {
+    // SAYA UBAH KEY-NYA JADI 'v2' AGAR MUNCUL LAGI DI BROWSER KAMU
+    const hasVisited = localStorage.getItem('visited_supri_v2');
+    if (!hasVisited) {
+      setShowWelcome(true);
+    }
+  }, []);
+
+  const handleAcceptWelcome = () => {
+    localStorage.setItem('visited_supri_v2', 'true');
+    setShowWelcome(false);
+  };
 
   // -- ADMIN SYSTEM --
   const [showAdmin, setShowAdmin] = useState(false);
@@ -76,11 +91,7 @@ function App() {
       setFish(result);
       setHistory(prev => [result, ...prev]);
       setLoading(false);
-      
-      // Update Logika Confetti untuk rarity baru
-      if (['Secret', 'Mitos', 'Epic', 'MYTHICAL', 'Legendary'].includes(result.rarity)) {
-        triggerConfetti();
-      }
+      if (['Legendary', 'MYTHICAL', 'Epic', 'Mitos', 'Secret'].includes(result.rarity)) triggerConfetti();
     }, 1500); 
   };
 
@@ -88,34 +99,25 @@ function App() {
     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#5865F2', '#EB459E', '#FFFFFF'] });
   };
 
-  // --- LOGIKA WARNA KARTU (UPDATED) ---
+  // --- LOGIKA WARNA KARTU ---
   const getCardStyle = (rarity) => {
     switch(rarity) {
       case 'Secret':
       case 'MYTHICAL': 
-        // Hijau Muda (Lime/Green)
         return 'bg-gradient-to-b from-lime-600/80 to-black border-lime-400/50 shadow-[0_0_40px_rgba(132,204,22,0.5)]';
-      
       case 'Mitos':
       case 'Legendary': 
-        // Merah
         return 'bg-gradient-to-b from-red-700/80 to-black border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.4)]';
-      
       case 'Epic': 
-        // Ungu
         return 'bg-gradient-to-b from-purple-800/80 to-slate-900 border-purple-500/50';
-      
       case 'Rare': 
-        // Biru
         return 'bg-gradient-to-b from-blue-800/80 to-slate-900 border-blue-500/50';
-      
       default: 
-        // Common/Uncommon (Abu Gelap)
         return 'bg-slate-700/50 border-slate-600';
     }
   };
 
-  // --- LOGIKA EMOJI (UPDATED) ---
+  // --- LOGIKA EMOJI ---
   const getFishEmoji = (rarity) => {
     if (rarity === 'Common' || rarity === 'Uncommon') return '😢'; 
     if (rarity === 'Secret' || rarity === 'MYTHICAL') return '🦈';
@@ -136,24 +138,63 @@ function App() {
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#202225]/80 backdrop-blur-md border-b border-white/5 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            
-            {/* Logo Kiri */}
             <div className="flex items-center gap-2 cursor-pointer select-none active:scale-95 transition-transform" onClick={handleLogoClick}>
               <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center text-white text-lg">🎣</div>
               <h1 className="text-xl font-black italic text-indigo-400 tracking-wider">
                 SUPRI <span className="text-white not-italic font-light">IT</span>
               </h1>
             </div>
-
-            {/* Koin Kanan */}
             <div className="bg-slate-900/50 border border-white/10 px-4 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
               <span className="text-yellow-400 text-lg drop-shadow-md">🪙</span>
               <span className="font-mono font-bold text-white text-lg">{coins}</span>
             </div>
-
           </div>
         </div>
       </nav>
+
+      {/* --- MODAL WELCOME (POP UP ATURAN) --- */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+          >
+            <div className="bg-[#2f3136] w-full max-w-md p-8 rounded-3xl border border-indigo-500/30 shadow-[0_0_50px_rgba(79,70,229,0.2)] text-center relative">
+              <div className="w-16 h-16 bg-indigo-500/20 rounded-full flex items-center justify-center text-4xl mb-6 mx-auto">
+                👋
+              </div>
+              <h2 className="text-2xl font-black text-white mb-2">Selamat Datang!</h2>
+              <p className="text-gray-400 text-sm mb-6">Selamat datang di <span className="text-indigo-400 font-bold">Supri IT RNG</span>. Sebelum bermain, mohon perhatikan hal berikut:</p>
+              
+              <div className="bg-black/30 p-4 rounded-xl text-left space-y-3 mb-8 text-sm text-gray-300 border border-white/5">
+                <div className="flex items-start gap-3">
+                  <span className="text-indigo-400 mt-0.5">✔</span>
+                  <p>Ini adalah <span className="text-white font-bold">Simulator Gacha</span>, tidak menggunakan uang asli.</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-indigo-400 mt-0.5">✔</span>
+                  <p>Kamu diberi modal awal <span className="text-yellow-400 font-bold">300 Koin</span>.</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-indigo-400 mt-0.5">✔</span>
+                  <p>Rarity <span className="text-lime-400 font-bold">SECRET</span> memiliki peluang 1%, sangat langka!</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-indigo-400 mt-0.5">✔</span>
+                  <p>Jika Kamu Dapat <span className="text-blue-400 font-bold">Ikan</span> Kamu Bisa Menghubungi Saya Atau Add Akun Roblox Saya @RyzenASF</p>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleAcceptWelcome}
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all active:scale-95 shadow-lg shadow-indigo-500/25"
+              >
+                SIAP, AYO GAS! 🚀
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* --- MODAL ADMIN --- */}
       <AnimatePresence>
@@ -165,7 +206,6 @@ function App() {
             <div className="bg-[#202225] w-full max-w-sm p-6 rounded-2xl border border-red-500/50 shadow-2xl relative">
               <button onClick={() => setShowAdmin(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
               <h2 className="text-lg font-bold text-red-500 font-mono mb-4 border-b border-red-500/20 pb-2">ADMIN PANEL 🛠️</h2>
-              
               <div className="space-y-4">
                 <div className="bg-[#2f3136] p-3 rounded-lg">
                   <label className="text-xs text-gray-400 uppercase font-bold">Inject Coins</label>
@@ -174,7 +214,6 @@ function App() {
                     <button onClick={() => setCoins(300)} className="flex-1 bg-yellow-600 hover:bg-yellow-500 py-2 rounded text-xs font-bold transition-colors">Reset</button>
                   </div>
                 </div>
-
                 <div className="bg-[#2f3136] p-3 rounded-lg">
                   <label className="text-xs text-gray-400 uppercase font-bold">Set Luck (Next Spin)</label>
                   <select 
@@ -187,7 +226,6 @@ function App() {
                     <option value="Mitos">Force MITOS (Merah)</option>
                   </select>
                 </div>
-                
                 <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="w-full py-3 border border-red-500/30 text-red-500 hover:bg-red-500/10 rounded text-xs font-bold transition-colors">
                   FACTORY DATA RESET
                 </button>
@@ -203,8 +241,6 @@ function App() {
         {/* KOLOM KIRI: AREA GACHA */}
         <section className="flex-1 flex flex-col items-center">
           <div className="w-full max-w-sm bg-[#36393f]/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl">
-            
-            {/* Kartu Display */}
             <div className="relative w-full aspect-[3/4] flex items-center justify-center perspective-1000 mb-6">
               <AnimatePresence mode="wait">
                 {loading ? (
@@ -227,21 +263,15 @@ function App() {
                     className={`w-full h-full rounded-2xl border-4 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden group shadow-2xl ${getCardStyle(fish.rarity)}`}
                   >
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none"></div>
-                    
                     <span className={`text-xs md:text-sm font-bold uppercase tracking-[0.2em] mb-4 bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm ${fish.color}`}>
                       {fish.rarity}
                     </span>
-                    
                     <div className="flex-1 flex items-center justify-center">
                        <div className="text-8xl md:text-9xl filter drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
                          {getFishEmoji(fish.rarity)}
                        </div>
                     </div>
-                    
-                    <h3 className="text-2xl md:text-3xl font-black text-white mt-4 drop-shadow-md leading-tight">
-                      {fish.name}
-                    </h3>
-                    
+                    <h3 className="text-2xl md:text-3xl font-black text-white mt-4 drop-shadow-md leading-tight">{fish.name}</h3>
                     <div className="mt-6 pt-4 border-t border-white/10 w-full flex justify-between items-end text-sm text-gray-300 font-mono">
                       <span>Value</span>
                       <span className="text-green-400 text-lg font-bold">${fish.price}</span>
@@ -256,8 +286,6 @@ function App() {
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Tombol Utama */}
             <button
               onClick={pullGacha}
               disabled={loading || coins < GACHA_COST}
@@ -273,7 +301,6 @@ function App() {
             >
               {loading ? 'Menarik Kail...' : coins < GACHA_COST ? 'Koin Habis' : `GACHA (${GACHA_COST} 🪙)`}
             </button>
-
           </div>
         </section>
 
@@ -281,12 +308,9 @@ function App() {
         <section className="w-full lg:w-96 flex flex-col gap-4">
           <div className="bg-[#202225]/80 backdrop-blur-md border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col h-full min-h-[500px]">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <span>📜</span> Riwayat Tangkapan
-              </h4>
+              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2"><span>📜</span> Riwayat Tangkapan</h4>
               <span className="text-xs bg-black/30 px-2 py-1 rounded text-gray-500">{history.length} Item</span>
             </div>
-            
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
               {history.length === 0 ? (
                  <div className="h-40 flex flex-col items-center justify-center text-gray-600 text-sm italic border-2 border-dashed border-gray-700/50 rounded-xl">
@@ -296,10 +320,7 @@ function App() {
               ) : (
                 history.map((item, idx) => (
                   <motion.div 
-                    key={idx} 
-                    initial={{ opacity: 0, x: -20 }} 
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * Math.min(idx, 5) }} 
+                    key={idx} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * Math.min(idx, 5) }} 
                     className="group bg-[#2f3136] hover:bg-[#36393f] p-4 rounded-xl border border-white/5 flex justify-between items-center transition-all hover:translate-x-1 hover:shadow-lg"
                   >
                     <div className="flex items-center gap-3">
@@ -311,12 +332,7 @@ function App() {
                          <span className="text-[10px] text-gray-500 font-mono">Harga Jual: ${item.price}</span>
                        </div>
                     </div>
-                    <span className={`text-[10px] font-bold px-2 py-1 rounded bg-black/30 
-                      ${item.rarity === 'Secret' ? 'text-lime-400 border border-lime-500/20' : 
-                        item.rarity === 'Mitos' ? 'text-red-500 border border-red-500/20' : 
-                        'text-gray-500'}`}>
-                      {item.rarity}
-                    </span>
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded bg-black/30 ${item.rarity === 'Secret' ? 'text-lime-400 border border-lime-500/20' : item.rarity === 'Mitos' ? 'text-red-500 border border-red-500/20' : 'text-gray-500'}`}>{item.rarity}</span>
                   </motion.div>
                 ))
               )}
@@ -329,9 +345,7 @@ function App() {
       {/* --- FOOTER --- */}
       <footer className="w-full bg-[#202225] border-t border-white/5 py-8 mt-auto z-10">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm mb-2">
-            &copy; 2024 <span className="text-indigo-400 font-bold">Indra Suliwa</span>. All rights reserved.
-          </p>
+          <p className="text-gray-500 text-sm mb-2">&copy; 2024 <span className="text-indigo-400 font-bold">Supri IT RNG</span>. All rights reserved.</p>
           <div className="flex justify-center gap-4 text-xs text-gray-600">
             <a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a>
             <span>•</span>
