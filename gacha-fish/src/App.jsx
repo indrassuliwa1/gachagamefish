@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 const LOCAL_FISH_DB = [
   { name: "Aduh Kamu Dapat Sampah", rarity: "Common", chance: 0.40, color: "text-gray-400", price: 5 },
   { name: "Iziin belum Hoki", rarity: "Uncommon", chance: 0.30, color: "text-gray-400", price: 15 },
-  { name: "Sinar Manta", rarity: "Rare", chance: 0.15, color: "text-blue-400", price: 50 },
-  { name: "Kepiting Ruin", rarity: "Epic", chance: 0.10, color: "text-purple-400", price: 200 },
+  { name: "Batu Enchant", rarity: "Rare", chance: 0.15, color: "text-blue-400", price: 50 },
+  { name: "Kepiting Ruin", rarity: "Epic", chance: 0.7, color: "text-purple-400", price: 200 },
   { name: "Kepiting Laut Runic", rarity: "Mitos", chance: 0.04, color: "text-red-500", price: 1000 },
   { name: "Hiu Petarung Glaidasi", rarity: "Secret", chance: 0.01, color: "text-lime-400", price: 10000 },
   { name: "Orca", rarity: "Secret", chance: 0.01, color: "text-lime-400", price: 10000 },
@@ -34,7 +34,6 @@ function App() {
 
   // Cek apakah user pengguna baru saat website dimuat
   useEffect(() => {
-    // SAYA UBAH KEY-NYA JADI 'v2' AGAR MUNCUL LAGI DI BROWSER KAMU
     const hasVisited = localStorage.getItem('visited_supri_v2');
     if (!hasVisited) {
       setShowWelcome(true);
@@ -119,10 +118,11 @@ function App() {
 
   // --- LOGIKA EMOJI ---
   const getFishEmoji = (rarity) => {
-    if (rarity === 'Common' || rarity === 'Uncommon') return '😢'; 
+    if (rarity === 'Common' || rarity === 'Uncommon') return '🤣'; 
+    if (rarity === 'Epic' || rarity === 'Epic') return '🦀';
     if (rarity === 'Secret' || rarity === 'MYTHICAL') return '🦈';
     if (rarity === 'Mitos' || rarity === 'Legendary') return '🐋';
-    return '🐟';
+    return '🪄';
   };
 
   return (
@@ -160,11 +160,15 @@ function App() {
             className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
           >
             <div className="bg-[#2f3136] w-full max-w-md p-8 rounded-3xl border border-indigo-500/30 shadow-[0_0_50px_rgba(79,70,229,0.2)] text-center relative">
+              
+              {/* Tombol Close di pojok kanan atas pop-up */}
+              <button onClick={() => setShowWelcome(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+
               <div className="w-16 h-16 bg-indigo-500/20 rounded-full flex items-center justify-center text-4xl mb-6 mx-auto">
                 👋
               </div>
               <h2 className="text-2xl font-black text-white mb-2">Selamat Datang!</h2>
-              <p className="text-gray-400 text-sm mb-6">Selamat datang di <span className="text-indigo-400 font-bold">Supri IT</span>. Sebelum bermain, mohon perhatikan hal berikut:</p>
+              <p className="text-gray-400 text-sm mb-6">Berikut adalah aturan main <span className="text-indigo-400 font-bold">Supri IT RNG</span>:</p>
               
               <div className="bg-black/30 p-4 rounded-xl text-left space-y-3 mb-8 text-sm text-gray-300 border border-white/5">
                 <div className="flex items-start gap-3">
@@ -173,15 +177,15 @@ function App() {
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-indigo-400 mt-0.5">✔</span>
-                  <p>Kamu diberi modal awal <span className="text-yellow-400 font-bold">300 Koin</span>.</p>
+                  <p>Modal awal: <span className="text-yellow-400 font-bold">300 Koin</span>.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-indigo-400 mt-0.5">✔</span>
-                  <p>Rarity <span className="text-lime-400 font-bold">SECRET</span> memiliki peluang 1%, sangat langka!</p>
+                  <p>Rarity <span className="text-lime-400 font-bold">SECRET</span> (1%) & <span className="text-red-500 font-bold">MITOS</span> (4%).</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-indigo-400 mt-0.5">✔</span>
-                  <p>Jika kamu dapta <span className="text-blue-400 font-bold">Ikan</span> Kamu bisa menghubungi saya dengan menyertakan screenshot hasil tangkapan atau add akun roblox @RyzenASF</p>
+                  <p>Dapat Ikan langka? Hubungi Roblox: <span className="text-white font-bold">@RyzenASF</span></p>
                 </div>
               </div>
 
@@ -342,16 +346,20 @@ function App() {
 
       </main>
 
-      {/* --- FOOTER --- */}
+      {/* --- FOOTER (ADA TOMBOL LIHAT ATURAN) --- */}
       <footer className="w-full bg-[#202225] border-t border-white/5 py-8 mt-auto z-10">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm mb-2">&copy; 2026 <span className="text-indigo-400 font-bold">Indra Suliwa</span>. All rights reserved.</p>
-          <div className="flex justify-center gap-4 text-xs text-gray-600">
-            <a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+          <p className="text-gray-500 text-sm mb-4">&copy; 2024 <span className="text-indigo-400 font-bold">Supri IT RNG</span>. All rights reserved.</p>
+          <div className="flex justify-center items-center gap-4 text-xs text-gray-600">
+            {/* TOMBOL UNTUK MEMBUKA KEMBALI POP-UP */}
+            <button 
+              onClick={() => setShowWelcome(true)} 
+              className="hover:text-indigo-400 transition-colors flex items-center gap-1 bg-white/5 px-3 py-1 rounded-full hover:bg-white/10"
+            >
+              📜 Lihat Aturan Main
+            </button>
             <span>•</span>
-            <a href="#" className="hover:text-indigo-400 transition-colors">Terms of Service</a>
-            <span>•</span>
-            <span className="cursor-help" title="Just a game!">Help</span>
+            <span className="cursor-help" title="Roblox: @RyzenASF">Help</span>
           </div>
         </div>
       </footer>
